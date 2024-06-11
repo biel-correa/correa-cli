@@ -21,4 +21,11 @@
 go.work
 go.work.sum
 
+# Idea
+.idea
+
+# Binaries
 correa-cli
+
+# VS Code
+.vscode
