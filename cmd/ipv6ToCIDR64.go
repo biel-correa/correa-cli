@@ -29,5 +29,7 @@ func ipv6ToCIDR64(ipv6 string) {
 	}
 
 	cidr := fmt.Sprintf("%s/64", ipv6)
-	fmt.Println("IPV6", ip, "=> CIDR64", cidr)
+	_, networkIp, _ := net.ParseCIDR(cidr)
+
+	fmt.Println("IPV6", ip, "=> CIDR64", networkIp)
 }
