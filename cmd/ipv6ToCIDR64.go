@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"net"
+
+	"github.com/spf13/cobra"
 )
 
 var Ipv6ToCIDR64Cmd = &cobra.Command{
@@ -16,18 +17,17 @@ var Ipv6ToCIDR64Cmd = &cobra.Command{
 }
 
 func ipv6ToCIDR64(ipv6 string) {
-	fmt.Println("Converting " + ipv6)
 	ip := net.ParseIP(ipv6)
 	if ip == nil {
-		fmt.Errorf("invalid IPv6 address")
+		fmt.Errorf("The provided address is not a valid IP address")
 		return
 	}
 
 	if ip.To4() != nil {
-		fmt.Errorf("the provided address is not an IPv6 address")
+		fmt.Errorf("The provided address is not an IPv6 address")
 		return
 	}
 
 	cidr := fmt.Sprintf("%s/64", ipv6)
-	fmt.Println(cidr)
+	fmt.Println("IPV6", ip, "=> CIDR64", cidr)
 }
