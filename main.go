@@ -19,6 +19,7 @@ func main() {
 	}
 
 	rootCmd.AddCommand(cmd.Ipv6ToCIDR64Cmd)
+	rootCmd.AddCommand(cmd.MyIpCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
