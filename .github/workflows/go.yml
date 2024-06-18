@@ -3,8 +3,6 @@ name: Build CLI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -42,3 +40,64 @@ jobs:
         name: correa-cli-${{ matrix.os }}
         path: |
           correa-cli*
+  
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: correa-cli-ubuntu-latest
+        path: artifacts/ubuntu
+    - uses: actions/download-artifact@v3
+      with:
+        name: correa-cli-macos-latest
+        path: artifacts/macos
+    - uses: actions/download-artifact@v3
+      with:
+        name: correa-cli-windows-latest
+        path: artifacts/windows
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
+        body: |
+          Release notes for version ${{ github.run_number }}.
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Assets (Ubuntu)
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: artifacts/ubuntu/correa-cli
+        asset_name: correa-cli-ubuntu
+        asset_content_type: application/octet-stream
+    
+    - name: Upload Release Assets (macOS)
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: artifacts/macos/correa-cli
+        asset_name: correa-cli-macos
+        asset_content_type: application/octet-stream
+
+    - name: Upload Release Assets (Windows)
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: artifacts/windows/correa-cli.exe
+        asset_name: correa-cli-windows.exe
+        asset_content_type: application/octet-stream
+
