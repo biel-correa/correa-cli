@@ -70,8 +70,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: v${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
         body: |
           Release notes for version ${{ github.run_number }}.
         draft: false
@@ -84,6 +84,8 @@ jobs:
         asset_path: artifacts/ubuntu/correa-cli
         asset_name: correa-cli-ubuntu
         asset_content_type: application/octet-stream
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Upload Release Assets (macOS)
       uses: actions/upload-release-asset@v1
@@ -92,6 +94,8 @@ jobs:
         asset_path: artifacts/macos/correa-cli
         asset_name: correa-cli-macos
         asset_content_type: application/octet-stream
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload Release Assets (Windows)
       uses: actions/upload-release-asset@v1
@@ -100,4 +104,6 @@ jobs:
         asset_path: artifacts/windows/correa-cli.exe
         asset_name: correa-cli-windows.exe
         asset_content_type: application/octet-stream
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
