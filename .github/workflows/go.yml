@@ -68,10 +68,10 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release ${{ github.run_number }}
+        tag_name: v${{ github.ref }}
+        release_name: Release ${{ github.ref }}
         body: |
           Release notes for version ${{ github.run_number }}.
         draft: false
