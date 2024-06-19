@@ -26,7 +26,7 @@ jobs:
       run: go mod download
 
     - name: Create .env file
-      run: echo "VERSION=${{ github.run_number }}" > .env
+      run: echo "VERSION=v${{ github.run_number }}" > .env
 
     - name: Build on Windows
       if: runner.os == 'Windows'
@@ -85,7 +85,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/ubuntu/correa-cli
+        asset_path: artifacts/ubuntu/
         asset_name: correa-cli-ubuntu
         asset_content_type: application/octet-stream
       env:
@@ -95,7 +95,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/macos/correa-cli
+        asset_path: artifacts/macos/
         asset_name: correa-cli-macos
         asset_content_type: application/octet-stream
       env:
@@ -105,7 +105,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/windows/correa-cli.exe
+        asset_path: artifacts/windows/
         asset_name: correa-cli-windows.exe
         asset_content_type: application/octet-stream
       env:
