@@ -29,3 +29,6 @@ correa-cli
 
 # VS Code
 .vscode
+
+# Environment
+.env

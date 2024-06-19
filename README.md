@@ -25,6 +25,7 @@ This is a CLI tool for simple tasks that I do everyday.
 @echo off
 "<path to artifact>" %*
 ```
+
 4. Add the folder to the PATH environment variable
 5. Run `correa` on the command line
 

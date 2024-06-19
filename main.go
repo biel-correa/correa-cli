@@ -2,6 +2,7 @@ package main
 
 import (
 	"correa-cli/cmd"
+	"correa-cli/provider"
 	"fmt"
 	"os"
 
@@ -9,6 +10,13 @@ import (
 )
 
 func main() {
+	var err = provider.LoadEnvironment()
+	if err != nil {
+		os.Exit(1)
+	}
+
+	provider.CheckForUpdates()
+
 	var rootCmd = &cobra.Command{
 		Use:   "correa",
 		Short: "Correa is a personal assistant CLI",
