@@ -36,14 +36,22 @@ jobs:
       if: runner.os != 'Windows'
       run: go build -o correa-cli
       shell: bash
+    
+    - name: Zip artifacts on Unix
+      if: runner.os != 'Windows'
+      run: zip correa-cli.zip correa-cli .env
+      shell: bash
+
+    - name: Zip artifacts on Windows
+      if: runner.os == 'Windows'
+      run: Compress-Archive -Path correa-cli.exe, .env -DestinationPath correa-cli.zip
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: correa-cli-${{ matrix.os }}
         path: |
-          correa-cli*
-          .env
+          correa-cli.zip
   
   create_release:
     name: Create Release
@@ -85,7 +93,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/ubuntu/
+        asset_path: artifacts/ubuntu/correa-cli.zip
         asset_name: correa-cli-ubuntu
         asset_content_type: application/octet-stream
       env:
@@ -95,7 +103,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/macos/
+        asset_path: artifacts/macos/correa-cli.zip
         asset_name: correa-cli-macos
         asset_content_type: application/octet-stream
       env:
@@ -105,7 +113,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/windows/
+        asset_path: artifacts/windows/correa-cli.zip
         asset_name: correa-cli-windows.exe
         asset_content_type: application/octet-stream
       env:
