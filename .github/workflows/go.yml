@@ -28,6 +28,9 @@ jobs:
     - name: Create .env file
       run: echo "VERSION=v${{ github.run_number }}" > .env
 
+    - name: Verify .env file
+      run: cat .env
+
     - name: Build on Windows
       if: runner.os == 'Windows'
       run: go build -o correa-cli.exe
@@ -46,12 +49,20 @@ jobs:
       if: runner.os == 'Windows'
       run: Compress-Archive -Path correa-cli.exe, .env -DestinationPath correa-cli.zip
 
+    - name: Verify zip file contents
+      if: runner.os != 'Windows'
+      run: unzip -l correa-cli.zip
+      shell: bash
+
+    - name: Verify zip file contents on Windows
+      if: runner.os == 'Windows'
+      run: tar -tvf correa-cli.zip
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: correa-cli-${{ matrix.os }}
-        path: |
-          correa-cli.zip
+        path: correa-cli.zip
   
   create_release:
     name: Create Release
@@ -62,16 +73,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Download build artifacts
+    - name: Download build artifacts (Ubuntu)
       uses: actions/download-artifact@v3
       with:
         name: correa-cli-ubuntu-latest
         path: artifacts/ubuntu
-    - uses: actions/download-artifact@v3
+
+    - name: Download build artifacts (macOS)
+      uses: actions/download-artifact@v3
       with:
         name: correa-cli-macos-latest
         path: artifacts/macos
-    - uses: actions/download-artifact@v3
+
+    - name: Download build artifacts (Windows)
+      uses: actions/download-artifact@v3
       with:
         name: correa-cli-windows-latest
         path: artifacts/windows
@@ -118,4 +133,3 @@ jobs:
         asset_content_type: application/octet-stream
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
